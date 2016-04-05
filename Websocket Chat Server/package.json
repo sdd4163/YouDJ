@@ -1,0 +1,17 @@
+{
+  "name": "chat-server",
+  "version": "1.0.0",
+  "description": "Websocket Chat Server Assignment",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+	"pretest": "jshint ./src",
+    "test": "echo \"Tests complete\""
+  },
+  "author": "Steven Dill",
+  "license": "ISC",
+  "dependencies": {
+    "jshint": "^2.9.1",
+    "socket.io": "^1.4.5"
+  }
+}

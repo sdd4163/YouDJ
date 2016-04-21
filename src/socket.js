@@ -101,6 +101,7 @@ var onUpV = function(socket) {
 	socket.on("upvote", function(data) {
 		users[data.targ].score++;
 		
+		
 		var messageToSend = data.name + " has raised " + data.targ + "'s score to " + users[data.targ].score + ".";
 		
 		socketMVC.everyone('msg', {

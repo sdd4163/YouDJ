@@ -22,8 +22,9 @@
     "mongoose": "^4.4.6",
     "pug": "^0.1.0",
     "serve-favicon": "^2.3.0",
-    "underscore": "^1.8.3",
-	"socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "socket.mvc": "^0.2.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "jshint": "^2.9.1"

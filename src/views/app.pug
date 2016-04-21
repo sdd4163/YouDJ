@@ -1,0 +1,44 @@
+extends ./base.pug
+block append style
+    link(rel="stylesheet", type="text/css", href="/assets/style.css")
+block body
+  nav
+    .navlink
+      a(href="/logout") Log out
+    .navlink
+      a(href="/adder") Add Songs
+    .navlink
+      a(href="/allSongs") All Songs
+  section#songs
+    if !songs || songs.length == 0
+      div.playlist
+      h3.emptyPlaylist No songs added yet
+    else
+      each val in songs
+        div.song
+          h3.songTitle Title: #{val.title}
+          p.songArtist Artist: #{val.artist}
+          p.songAlbum Album: #{val.album}
+  section
+    label(for="user") Username:
+    input#username(type="text", name="user", placeholder="Username")
+    input#connect(type="button", value="connect")
+    br
+    label(for="message") Message:
+    input#message(type="text", name="message", placeholder="Message to Send")
+    input#send(type="button", value="send")
+    textarea#chat(rows="20", cols="40", readonly)
+block scripts
+        script(src="/assets/adder.js")
+        script(src="/assets/chat.js")
+        script(src="http://localhost:3000/socket.io/socket.io.js")
+        script.
+          function init() {
+            var connect = document.querySelector("#connect");
+            connect.addEventListener('click', connectSocket);
+          
+            var send = document.querySelector("#send");
+            send.addEventListener('click', sendMessage);
+          }
+          
+          window.onload = init;

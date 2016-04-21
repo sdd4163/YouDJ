@@ -1,0 +1,18 @@
+extends ./base.pug
+block append style
+block body
+  nav
+    .navlink
+      a(href="/login") Login
+    .navlink
+      a(href="/signup") Sign up
+  section#login
+    form#loginForm(class="mainForm", name="loginForm", action="/login", method="POST")
+      label(for="username") Username: 
+      input#user(type="text", name="username", placeholder="username")
+      label(for="pass") Password: 
+      input#pass(type="password", name="pass", placeholder="password")
+      input(type="hidden", name="_csrf", value=csrfToken)
+      a#loginSubmit(class="formSubmit", href="#") Sign in
+block scripts
+    script(src="/assets/client.js")

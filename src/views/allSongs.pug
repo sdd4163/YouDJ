@@ -1,0 +1,20 @@
+extends ./base.pug
+block append style
+block body
+  nav
+    .navlink
+      a(href="/logout") Log out
+    .navlink
+      a(href="/app") My Songs
+  section#songs
+    if !songs || songs.length == 0
+      div.playlist
+      h3.emptyPlaylist No one has added any songs yet!
+    else
+      each val in songs
+        div.song
+          h3.songTitle Title: #{val.title}
+          p.songArtist Artist: #{val.artist}
+          p.songAlbum Album: #{val.album}
+block scripts
+        script(src="/assets/adder.js")

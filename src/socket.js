@@ -1,29 +1,18 @@
-var http = require('http');
-var fs = require('fs');
-var socketio = require('socket.io');
+var models = require('./models');
+var Account = models.Account;
 
-var port = process.env.PORT || process.env.NODE_PORT || 3000;
-
-//read the client html file into memory
-//__dirname in node is the current directory
-//in this case the same folder as the server js file
-var index = fs.readFileSync(__dirname + '/../client/client.html');
-
-function onRequest(request, response) {
-
- response.writeHead(200, {"Content-Type": "text/html"});
- response.write(index);
- response.end();
-}
-
-var app = http.createServer(onRequest).listen(port);
-
-console.log("Listening on 127.0.0.1:" + port);
-
-//pass in the http server into socketio and grab the websocket server as io
-var io = socketio(app);
-
-//object to hold all of our connected users
+module.exports = function(socket) {
+	onJoined(socket);
+	onMsg(socket);
+	onScore(socket);
+	onList(socket);
+	onRename(socket);
+	onUpV(socket);
+	onDownV(socket);
+	onWhosDJ(socket);
+	onDisconnect(socket);
+};
+var socketMVC = require('socket.mvc');
 var users = {};
 
 var onJoined = function(socket) {
@@ -63,7 +52,7 @@ var onJoined = function(socket) {
 
 var onMsg = function(socket) {
 	socket.on('msgToServer', function(data) {
-		io.sockets.in('room1').emit('msg', {
+		socketMVC.everyone('msg', {
 			name: data.name,
 			msg: data.msg
 		});
@@ -86,7 +75,7 @@ var onRename = function(socket) {
 	socket.on('rename', function(data) {
 		users[socket.name] = data.newN;			//Set the new name, keeping the same index in the list of users
 		
-		io.sockets.in('room1').emit('msg', {		//Broadcast name change
+		socketMVC.everyone('msg', {		//Broadcast name change
 			name: 'server',
 			msg: data.name + " has changed their name to " + data.newN
 		});
@@ -114,7 +103,7 @@ var onUpV = function(socket) {
 		
 		var messageToSend = data.name + " has raised " + data.targ + "'s score to " + users[data.targ].score + ".";
 		
-		io.sockets.in('room1').emit('msg', {
+		socketMVC.everyone('msg', {
 			name: 'server',
 			msg: messageToSend
 		});
@@ -127,7 +116,7 @@ var onDownV = function(socket) {
 		
 		var messageToSend = data.name + " has lowered " + data.targ + "'s score to " + users[data.targ].score + ".";
 		
-		io.sockets.in('room1').emit('msg', {
+		socketMVC.everyone('msg', {
 			name: 'server',
 			msg: messageToSend
 		});
@@ -165,17 +154,3 @@ var onDisconnect = function(socket) {
 		});
 	});
 };
-
-io.sockets.on("connection", function(socket) {
-	onJoined(socket);
-	onMsg(socket);
-	onScore(socket);
-	onList(socket);
-	onRename(socket);
-	onUpV(socket);
-	onDownV(socket);
-	onWhosDJ(socket);
-	onDisconnect(socket);
-});
-
-console.log('websocket server started');

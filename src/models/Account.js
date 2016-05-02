@@ -95,12 +95,6 @@ AccountSchema.statics.authenticate = function(username, password, callback) {
 	});
 };
 
-AccountSchema.statics.getPop = function() {
-	return {
-		popularity: this.popularity
-	}
-}
-
 AccountModel = mongoose.model('Account', AccountSchema);
 
 

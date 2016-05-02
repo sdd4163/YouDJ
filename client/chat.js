@@ -1,7 +1,9 @@
 var socket;
+var user;
 
-function connectSocket(e) {
+function connectSocket(username) {
 	console.log("connect");
+	user = username;
 	var message = document.querySelector("#message");
 	var chat = document.querySelector("#chat");
 	
@@ -10,11 +12,6 @@ function connectSocket(e) {
 	//listener for connect event
 	socket.on('connect', function() {
 		console.log('connecting');
-		
-		var user = document.querySelector("#username").value;
-		if(!user) {
-			user = 'unknown';
-		}
 		socket.emit('join', { name: user });
 	});
 	
@@ -26,7 +23,6 @@ function connectSocket(e) {
 }
 
 function sendMessage(e) {
-	var user = document.querySelector("#username").value;
 	var messageToSend = message.value;
 	
 	if (messageToSend == "/score") {

@@ -1,0 +1,4 @@
+https://developers.soundcloud.com/
+https://www.npmjs.com/package/node-soundcloud
+
+https://www.npmjs.com/package/soundcloud-node

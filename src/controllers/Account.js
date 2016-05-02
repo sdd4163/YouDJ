@@ -37,7 +37,6 @@ var signup = function(req, res) {
 				console.log(err);
 				return res.status(400).json({error: 'An error occurred'});
 			}
-			
 			req.session.account = newAccount.toAPI();
 			
 			res.json({redirect: '/app'});
@@ -45,8 +44,13 @@ var signup = function(req, res) {
 	});
 };
 
+var appPage = function(req, res) {
+	res.render('app', {csrfToken: req.csrfToken(), account: req.session.account});
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signupPage = signupPage;
 module.exports.signup = signup;
+module.exports.appPage = appPage;

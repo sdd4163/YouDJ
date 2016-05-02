@@ -1,6 +1,5 @@
 var _ = require('underscore');
 var models = require('../models');
-
 var Song = models.Song;
 
 var adderPage = function(req, res) {

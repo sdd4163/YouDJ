@@ -5,25 +5,18 @@ block body
   nav
     .navlink
       a(href="/logout") Log out
-    .navlink
-      a(href="/adder") Add Songs
-    .navlink
-      a(href="/allSongs") All Songs
-  section#songs
-    if !songs || songs.length == 0
-      div.playlist
-      h3.emptyPlaylist No songs added yet
-    else
-      each val in songs
-        div.song
-          h3.songTitle Title: #{val.title}
-          p.songArtist Artist: #{val.artist}
-          p.songAlbum Album: #{val.album}
+  section#accountInfo
+    div
+      h3.username Username: #{account.username}
+  section#audioControls
+    audio#player(controls="" autoplay="" preload autobuffer)
+    section
+      div.input-group
+        input#search(type="search" name="search" class="form-control" placeholder="Search Songs")
+        span.input-group-btn
+          input#searchB(class="btn btn-default btn-search" type="button" value="Go!")
+      div#searchResults
   section
-    label(for="user") Username:
-    input#username(type="text", name="user", placeholder="Username")
-    input#connect(type="button", value="connect")
-    br
     label(for="message") Message:
     input#message(type="text", name="message", placeholder="Message to Send")
     input#send(type="button", value="send")
@@ -32,13 +25,8 @@ block scripts
         script(src="/assets/adder.js")
         script(src="/assets/chat.js")
         script(src="/socket.io/socket.io.js")
+        script(src="http://connect.soundcloud.com/sdk.js")
+        script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+        script(src="//code.jquery.com/ui/1.11.4/jquery-ui.js")
         script.
-          function init() {
-            var connect = document.querySelector("#connect");
-            connect.addEventListener('click', connectSocket);
-          
-            var send = document.querySelector("#send");
-            send.addEventListener('click', sendMessage);
-          }
-          
-          window.onload = init;
+          connectSocket(#{account.username})

@@ -11,6 +11,7 @@ module.exports = function(socket) {
 	onDownV(socket);
 	onWhosDJ(socket);
 	onDisconnect(socket);
+	onPlaySong(socket);
 };
 var socketMVC = require('socket.mvc');
 var users = {};
@@ -85,7 +86,6 @@ var onRename = function(socket) {
 var onList = function(socket) {
 	socket.on("list", function(data) {
 		var messageToSend = "Current users: ";
-		
 		Object.keys(users).forEach(function(key) {		//Loops through users and gets each one's name
 			messageToSend += users[key].name + " ";
 		});
@@ -99,8 +99,10 @@ var onList = function(socket) {
 
 var onUpV = function(socket) {
 	socket.on("upvote", function(data) {
-		users[data.targ].score++;
+		//users[data.targ].score++;
 		
+		//var conditions = { username: data.targ };
+		//Account.AccountModel.update({ username: data.targ }, { popularity: 1 }, { multi: true }, callback);
 		
 		var messageToSend = data.name + " has raised " + data.targ + "'s score to " + users[data.targ].score + ".";
 		
@@ -136,6 +138,14 @@ var onWhosDJ = function(socket) {
 		socket.emit('msg', {
 			name: 'server',
 			msg: messageToSend
+		});
+	});
+};
+
+var onPlaySong = function(socket) {
+	socket.on("playSong", function(data) {
+		socketMVC.everyone('play', {
+			path: data.path
 		});
 	});
 };

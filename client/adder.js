@@ -15,6 +15,9 @@ $(document).ready(function() {
 	socket.on('play', function(data) {
 		playStream(data.path);
 	});
+	socket.on('playLate', function(data) {
+		playStreamLate(data.path, data.time);
+	});
 	
 	//Soundcloud stuff
 	SC.initialize({
@@ -64,6 +67,13 @@ $(document).ready(function() {
 		path += '?client_id=' + clientID;
 		audioElement.src = path;
 		audioElement.play();
+		audioElement.volume = 0.5;
+	}
+	function playStreamLate(path, time){
+		path += '?client_id=' + clientID;
+		audioElement.src = path;
+		audioElement.play();
+		audioElement.currentTime = time;
 		audioElement.volume = 0.5;
 	}
 	

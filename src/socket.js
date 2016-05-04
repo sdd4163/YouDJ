@@ -16,6 +16,12 @@ module.exports = function(socket) {
 var socketMVC = require('socket.mvc');
 var users = {};
 
+//Variables for time syncing
+var songPlaying = false;
+var curTime;
+var curSong;
+
+
 var onJoined = function(socket) {
 	socket.on("join", function(data) {
 
@@ -38,6 +44,14 @@ var onJoined = function(socket) {
 		users[socket.name] = newUser;
 		
 		socket.join('room1');
+		
+		//Plays the current song at the correct time for new users
+		if (songPlaying) {
+			socket.emit('playLate', {
+				path: curSong,
+				time:  ((Date.now() - curTime) + 90) / 1000	//Puts current time into seconds
+			});
+		}
 		
 		socket.broadcast.to('room1').emit('msg', {
 			name: 'server',
@@ -144,6 +158,10 @@ var onWhosDJ = function(socket) {
 
 var onPlaySong = function(socket) {
 	socket.on("playSong", function(data) {
+		songPlaying = true;
+		curTime = Date.now();
+		curSong = data.path;
+		
 		socketMVC.everyone('play', {
 			path: data.path
 		});

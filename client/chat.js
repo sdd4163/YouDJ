@@ -38,14 +38,6 @@ function sendMessage(e) {
 		socket.emit('who', {
 		});
 	}
-	else if (messageToSend.indexOf("/rename") != -1) {				//Searches for the rename command, then splits up the string to get the new name
-		var newName = messageToSend.slice(8);
-		document.querySelector("#username").value = newName;
-		socket.emit('rename', {
-			name: user,
-			newN: newName
-		});
-	}
 	else if (messageToSend.indexOf("/upvote") != -1) {				//Searches for the rename command, then splits up the string to get the new name
 		var targetName = messageToSend.slice(8);
 		socket.emit('upvote', {

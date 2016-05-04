@@ -86,17 +86,6 @@ var onScore = function(socket) {
 	});
 };
 
-var onRename = function(socket) {
-	socket.on('rename', function(data) {
-		users[socket.name] = data.newN;			//Set the new name, keeping the same index in the list of users
-		
-		socketMVC.everyone('msg', {		//Broadcast name change
-			name: 'server',
-			msg: data.name + " has changed their name to " + data.newN
-		});
-	});
-};
-
 var onList = function(socket) {
 	socket.on("list", function(data) {
 		var messageToSend = "Current users: ";
@@ -158,19 +147,29 @@ var onWhosDJ = function(socket) {
 
 var onPlaySong = function(socket) {
 	socket.on("playSong", function(data) {
-		songPlaying = true;
-		curTime = Date.now();
-		curSong = data.path;
-		
-		socketMVC.everyone('play', {
-			path: data.path
-		});
+		if (users[socket.name].isDJ) {
+			songPlaying = true;
+			curTime = Date.now();
+			curSong = data.path;
+			
+			socketMVC.everyone('play', {
+				path: data.path
+			});
+		}
 	});
 };
 
 var onDisconnect = function(socket) {
 	socket.on('disconnect', function(data) {
+		if (users[socket.name].isDJ && Object.keys(users).length > 1){
+			var keyArr = Object.keys(users);
+			users[keyArr[1]].isDJ = true;
+		}
 		delete users[socket.name];			//Removes disconnecting user from the list
+		
+		if (Object.keys(users).length < 1) {
+			songPlaying = false;
+		}
 		
 		socket.broadcast.to('room1').emit('msg', {
 			name: 'server',

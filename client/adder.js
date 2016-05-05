@@ -77,8 +77,8 @@ $(document).ready(function() {
 	function playStreamLate(path, time){
 		path += '?client_id=' + clientID;
 		audioElement.src = path;
-		audioElement.play();
 		audioElement.currentTime = time;
+		audioElement.play();
 		audioElement.volume = 0.5;
 	}
 	function playSong(url, username){

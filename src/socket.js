@@ -6,20 +6,20 @@ module.exports = function(socket) {
 	onMsg(socket);
 	onScore(socket);
 	onList(socket);
-	onRename(socket);
 	onUpV(socket);
 	onDownV(socket);
 	onWhosDJ(socket);
 	onDisconnect(socket);
 	onPlaySong(socket);
+	onSongEnded(socket);
 };
 var socketMVC = require('socket.mvc');
 var users = {};
 
 //Variables for time syncing
 var songPlaying = false;
-var curTime;
-var curSong;
+var curTime, curSong;
+var numSongPlays = 0;
 
 
 var onJoined = function(socket) {
@@ -159,26 +159,66 @@ var onPlaySong = function(socket) {
 	});
 };
 
+var onSongEnded = function(socket) {
+	socket.on("songEnded", function() {
+		if (numSongPlays >= 3) {
+			numSongPlays = 0;
+			Object.keys(users).forEach(function(key) {		//Loops through users
+				if (users[key].isDJ) {
+					users[key].isDJ = false;
+				}
+			});
+			//Sets random user as new DJ
+			var newDJIndex = RandomUserIndex();
+			users[newDJIndex].isDJ = true;
+			var messageToSend = users[newDJIndex].name + " is the new DJ!";
+			
+			socketMVC.everyone('msg', {
+				name: 'server',
+				msg: messageToSend
+			});
+		}
+		else {
+			numSongPlays++;
+		}
+	});
+};
+
 var onDisconnect = function(socket) {
 	socket.on('disconnect', function(data) {
 		if (users[socket.name].isDJ && Object.keys(users).length > 1){
-			var keyArr = Object.keys(users);
-			users[keyArr[1]].isDJ = true;
+			//Sets new DJ that isn't the disconnecting user
+			var newDJIndex;
+			do {
+				newDJIndex = RandomUserIndex();
+			} while (users[socket.name] == users[newDJIndex])
+			users[newDJIndex].isDJ = true;
+			//Server message of new DJ
+			var messageToSend = users[newDJIndex].name + " is the new DJ!";		
+			socketMVC.everyone('msg', {
+				name: 'server',
+				msg: messageToSend
+			});
 		}
 		delete users[socket.name];			//Removes disconnecting user from the list
 		
 		if (Object.keys(users).length < 1) {
-			songPlaying = false;
+			songPlaying = false;	//Sets songPlaying to false so users joining an empty room don't resume a song
 		}
 		
 		socket.broadcast.to('room1').emit('msg', {
 			name: 'server',
 			msg: socket.name + " has left the room."
 		});
-		
 		socket.broadcast.to('room1').emit('msg', {
 			name: 'server',
 			msg: 'There are ' + Object.keys(users).length + ' users online'
 		});
 	});
 };
+
+
+function RandomUserIndex() {
+	var keyArr = Object.keys(users);
+	return keyArr[Math.floor(Math.random() * (keyArr.length))];
+}

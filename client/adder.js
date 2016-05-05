@@ -63,6 +63,11 @@ $(document).ready(function() {
 		}, 1000);
 	});
 	
+	audioElement.onended = function() {
+		socket.emit('songEnded', {
+		});
+	};
+	
 	function playStream(path){
 		path += '?client_id=' + clientID;
 		audioElement.src = path;
@@ -76,9 +81,7 @@ $(document).ready(function() {
 		audioElement.currentTime = time;
 		audioElement.volume = 0.5;
 	}
-	
 	function playSong(url, username){
-		//playStream(audioElement, url + '?client_id=' + clientID);
 		socket.emit('playSong', {
 			path: url,
 			artist: username

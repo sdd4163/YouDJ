@@ -1,0 +1,21 @@
+Incorporate Visualizer into client
+
+Create custom-made audio controls (no pause/play, only volume for listeners)
+
+Store/modify user reputation scores (Might not use rep, instead might use random next DJ)
+
+Unit Tests
+
+Good-looking UI (nonexistent right now)
+
+Replace repeated code with helper functions
+
+Comment//////
+
+Improve Chat?
+
+More user data? (avatar, playlists, etc)
+
+More Soundcloud features?
+
+Clean up old/useless code

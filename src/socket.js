@@ -49,7 +49,7 @@ var onJoined = function(socket) {
 		if (songPlaying) {
 			socket.emit('playLate', {
 				path: curSong,
-				time:  ((Date.now() - curTime) + 90) / 1000	//Puts current time into seconds
+				time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds
 			});
 		}
 		
@@ -147,6 +147,7 @@ var onWhosDJ = function(socket) {
 
 var onPlaySong = function(socket) {
 	socket.on("playSong", function(data) {
+		console.log(users[socket.name].isDJ);
 		if (users[socket.name].isDJ) {
 			songPlaying = true;
 			curTime = Date.now();
@@ -161,25 +162,27 @@ var onPlaySong = function(socket) {
 
 var onSongEnded = function(socket) {
 	socket.on("songEnded", function() {
-		if (numSongPlays >= 3) {
-			numSongPlays = 0;
-			Object.keys(users).forEach(function(key) {		//Loops through users
-				if (users[key].isDJ) {
-					users[key].isDJ = false;
-				}
-			});
-			//Sets random user as new DJ
-			var newDJIndex = RandomUserIndex();
-			users[newDJIndex].isDJ = true;
-			var messageToSend = users[newDJIndex].name + " is the new DJ!";
-			
-			socketMVC.everyone('msg', {
-				name: 'server',
-				msg: messageToSend
-			});
-		}
-		else {
-			numSongPlays++;
+		if (users[socket.name].isDJ) {
+			if (numSongPlays >= 3) {
+				numSongPlays = 0;
+				Object.keys(users).forEach(function(key) {		//Loops through users
+					if (users[key].isDJ) {
+						users[key].isDJ = false;
+					}
+				});
+				//Sets random user as new DJ
+				var newDJIndex = RandomUserIndex();
+				users[newDJIndex].isDJ = true;
+				var messageToSend = users[newDJIndex].name + " is the new DJ!";
+				
+				socketMVC.everyone('msg', {
+					name: 'server',
+					msg: messageToSend
+				});
+			}
+			else {
+				numSongPlays++;
+			}
 		}
 	});
 };

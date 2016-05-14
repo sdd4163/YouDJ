@@ -17,7 +17,6 @@ function connectSocket(username) {
 	
 	//listener for msg event
 	socket.on('msg', function(data) {
-		console.log(data);
 		chat.innerHTML += data.name + ": " + data.msg + '\n';
 	});
 }
@@ -25,35 +24,29 @@ function connectSocket(username) {
 function sendMessage(e) {
 	var messageToSend = message.value;
 	
-	if (messageToSend == "/score") {
+	//Check for chat commands
+	if (messageToSend == "/score") {	//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!
 		socket.emit('score', {
 			name: user
 		});
 	}
-	else if (messageToSend == "/list") {
+	else if (messageToSend == "/list") {	//Lists currently connected users
 		socket.emit('list', {
 		});
 	}
-	else if (messageToSend == "/who") {
+	else if (messageToSend == "/who") {		//Tells who the DJ is
 		socket.emit('who', {
 		});
 	}
-	else if (messageToSend.indexOf("/upvote") != -1) {				//Searches for the rename command, then splits up the string to get the new name
+	else if (messageToSend.indexOf("/upvote") != -1) {	//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!
 		var targetName = messageToSend.slice(8);
 		socket.emit('upvote', {
 			name: user,
 			targ: targetName
 		});
 	}
-	else if (messageToSend.indexOf("/downvote") != -1) {				//Searches for the rename command, then splits up the string to get the new name
-		var targetName = messageToSend.slice(10);
-		socket.emit('downvote', {
-			name: user,
-			targ: targetName
-		});
-	}
 	else {
-		socket.emit('msgToServer', {			//If no commands, just send a message
+		socket.emit('msgToServer', {	//If no commands, just send a chat message
 			name: user,
 			msg: messageToSend
 		});

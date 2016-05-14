@@ -9,9 +9,10 @@ var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var url = require('url');
 var csrf = require('csurf');
-var socketMVC = require('socket.mvc');
+var socketMVC = require('socket.mvc');		//MVC-oriented socketio package, allows socket calls from any file
 
-var dbURL = process.env.MONGODB_URI || "mongodb://localhost/MVCProject";
+//Mongoose Init
+var dbURL = process.env.MONGODB_URI || "mongodb://localhost/YouDJ";
 var db = mongoose.connect(dbURL, function(err) {
 	if(err) {
 		console.log("Could not connect to database");
@@ -19,6 +20,7 @@ var db = mongoose.connect(dbURL, function(err) {
 	}
 });
 
+//Redis Init
 var redisURL = {
 	hostname: 'localhost',
 	port: 6379
@@ -46,7 +48,7 @@ app.use(session({
 		port: redisURL.port,
 		pass: redisPASS
 	}),
-	secret: 'Playlist Maker',
+	secret: 'YouDJ',
 	resave: true,
 	saveUninitialized: true,
 	cookie: {
@@ -78,6 +80,7 @@ var server = app.listen(port, function(err) {
 	console.log('Listening on port ' + port);
 });
 
+//Connect Socketio, then connect SocketMVC
 var io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {
 	socketMVC.init(io, socket, {

@@ -1,21 +1,34 @@
-Incorporate Visualizer into client
+----------------------Required-----------------------------
 
-Create custom-made audio controls (no pause/play, only volume for listeners)
+-Incorporate Visualizer into client
 
-Store/modify user reputation scores (Might not use rep, instead might use random next DJ)
+-Add and implement "Boo" button (DJ is changed after 3(?) boos)
 
-Unit Tests
+-Unit Tests
 
-Good-looking UI (nonexistent right now)
+-Good-looking UI (nonexistent right now)
 
-Replace repeated code with helper functions
 
-Comment//////
+-------------------Stretch Goals---------------------------
 
-Improve Chat?
+-More Soundcloud features?
 
-More user data? (avatar, playlists, etc)
+-More user data? (avatar, playlists, etc)
 
-More Soundcloud features?
+-Improve Chat?
 
-Clean up old/useless code
+-Create custom audio controls (add progress bar?)
+
+
+----------------Continuous/Final Checks--------------------
+
+-Clean up old/useless code
+
+-Comment
+
+-Replace repeated code with helper functions
+
+-Change/Update things to current project
+	>Change package's description
+	>Change file names?
+	>Remove old files

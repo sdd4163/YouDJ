@@ -46,18 +46,19 @@ var onJoined = function(socket) {
 		
 		socket.join('room1');
 		
-		//Plays the current song at the correct time for users who join late
+		
+		
+		BroadcastServerMessage(socket,  data.name + " has joined the room.");
+		EmitServerMessage(socket, 'You joined the room', false);
+		EmitServerMessage(socket, 'Type /cmd to see chat commands', false);
+	});
+	//Plays the current song at the correct time for users who join late
 		if (songPlaying) {
 			socket.emit('playLate', {
 				path: curSong,
 				time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds
 			});
 		}
-		
-		BroadcastServerMessage(socket,  data.name + " has joined the room.");
-		EmitServerMessage(socket, 'You joined the room', false);
-		EmitServerMessage(socket, 'Type /cmd to see chat commands', false);
-	});
 };
 
 //Handle normal chat messages

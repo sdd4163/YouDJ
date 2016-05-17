@@ -48,6 +48,7 @@ var onJoined = function(socket) {
 		
 		//Plays the current song at the correct time for users who join late
 		if (songPlaying) {
+			EmitServerMessage(socket, "p", false);
 			socket.emit('playLate', {
 				path: curSong,
 				time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds

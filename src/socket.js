@@ -52,13 +52,13 @@ var onJoined = function(socket) {
 		EmitServerMessage(socket, 'You joined the room', false);
 		EmitServerMessage(socket, 'Type /cmd to see chat commands', false);
 	});
-	//Plays the current song at the correct time for users who join late
-		if (songPlaying) {
-			socket.emit('playLate', {
-				path: curSong,
-				time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds
-			});
-		}
+	//Plays the current song at the correct time for users who join late. Called here to ensure socket is connected before calling
+	if (songPlaying) {
+		socket.emit('playLate', {
+			path: curSong,
+			time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds
+		});
+	}
 };
 
 //Handle normal chat messages

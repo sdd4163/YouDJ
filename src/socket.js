@@ -76,7 +76,7 @@ var onList = function(socket) {
 		var messageToSend = "Current users: ";
 		
 		Object.keys(users).forEach(function(key) {		//Loops through users and gets each one's name
-			messageToSend += users[key].name + ", ";
+			messageToSend += users[key].name + " ";
 		});
 		
 		EmitServerMessage(socket, messageToSend, false);

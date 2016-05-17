@@ -1,18 +1,20 @@
 extends ./base.pug
 block append style
+    link(rel="stylesheet", type="text/css", href="/assets/style2.css")
 block body
   nav
     .navlink
-      a(href="/login") Login
-    .navlink
       a(href="/signup") Sign up
+  h1 Welcome to YouDJ!
+  h3 Please login or signup to enjoy!
   section#login
     form#loginForm(class="mainForm", name="loginForm", action="/login", method="POST")
       label(for="username") Username: 
-      input#user(type="text", name="username", placeholder="username")
+      input#user(type="text", name="username", placeholder="Username")
       label(for="pass") Password: 
-      input#pass(type="password", name="pass", placeholder="password")
+      input#pass(type="password", name="pass", placeholder="Password")
       input(type="hidden", name="_csrf", value=csrfToken)
       a#loginSubmit(class="formSubmit", href="#") Sign in
+    section#error
 block scripts
     script(src="/assets/client.js")

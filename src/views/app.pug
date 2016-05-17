@@ -7,28 +7,81 @@ block body
       a(href="/logout") Log out
   section#accountInfo
     div
-      h3.username Username: #{account.username}
+      h1.username Welcome, #{account.username}
+  section#visualizer
+    div#canvas1
+      canvas#bCanvas(width="1000" height="540")
+    div#canvas2
+      canvas#canvas(width="1000" height="540")
+    div#visualizerControls
+      div
+        h2.colorsHeading Colors
+        section
+          label Background Color: 
+            select#bGColor
+              option(value="black") Black
+              option(value="white") White
+              option(value="red") Red
+              option(value="blue") Blue
+              option(value="green") Green
+        section
+          label Stroke Color: 
+            select#sColor
+              option(value="purple") Purple
+              option(value="pink") Pink
+              option(value="red") Red
+              option(value="blue") Blue
+              option(value="green") Green
+      div
+        h2 Effects
+        section
+          label Toggles:
+            input#circleBox(type="checkbox" checked)
+            | Circle    
+            input#lineBox(type="checkbox" checked)
+            | Wave Line
+        section
+          label Circle Radius:
+            input#radiusSlider(type="range" min="0.0" max="10.0" step="0.5" value="5.0")
+      div
+        h2 Spinning Lines
+        section
+          label Spinning Lines On:
+            input#linesBox(type="checkbox" checked)
+        section
+          label Line Thickness: 
+            input#lineThicknessSlider(type="range" min="1.0" max="10.0" step="1.0" value="5.0")
+        section
+          label Style: 
+            select#style
+              option(value="one") Style 1
+              option(value="two") Style 2
+              option(value="three") Style 3
+              option(value="four") Style 4
+        input#saveButton(type="button" value="Save Settings")
+        input#loadButton(type="button" value="Load Settings")
+  section#chatControls
+    textarea#chat(rows="20", cols="40", readonly)
+    input#message(type="text", name="message", placeholder="Message to Send")
+    input#send(type="button", value="Send")
   section#audioControls
     audio#player(autoplay="" preload autobuffer)
-    label(for="volume") Volume:
+    label#volumeLabel Volume:
     input#playerVol(type="range" name="volume" min="0.0" max="1.0" step="0.05" value="0.3")
+    input#boo(type="button" value="Boo DJ!")
     section
       div.input-group
         input#search(type="search" name="search" class="form-control" placeholder="Search Songs")
         span.input-group-btn
           input#searchB(class="btn btn-default btn-search" type="button" value="Go!")
       div#searchResults
-  section
-    label(for="message") Message:
-    input#message(type="text", name="message", placeholder="Message to Send")
-    input#send(type="button", value="send")
-    textarea#chat(rows="20", cols="40", readonly)
+        | Search for songs on Souncloud above!
 block scripts
         script(src="/assets/adder.js")
         script(src="/assets/chat.js")
+        script(src="/assets/visualizer.js")
         script(src="/socket.io/socket.io.js")
         script(src="https://connect.soundcloud.com/sdk.js")
-        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
         script(src="//code.jquery.com/ui/1.11.4/jquery-ui.js")
         script.
           connectSocket(#{account.username})

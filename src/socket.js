@@ -8,9 +8,11 @@ module.exports = function(socket) {
 	onMsg(socket);
 	onList(socket);
 	onWhosDJ(socket);
-	onDisconnect(socket);
 	onPlaySong(socket);
 	onSongEnded(socket);
+	onBoo(socket);
+	onCommand(socket);
+	onDisconnect(socket);
 };
 
 //Object to hold connected users
@@ -29,14 +31,13 @@ var numSongPlays = 0;
 //Handle new user connecting
 var onJoined = function(socket) {
 	socket.on("join", function(data) {
-		//Tell how many other users are connected
-		EmitServerMessage(socket, 'There are ' + Object.keys(users).length + 'other users online');
-		
 		//Create user's object and add to list
 		socket.name = data.name;
 		var newUser = { 
 			name: socket.name, 
-			isDJ: false
+			isDJ: false,
+			booCount: 0,
+			hasBooed: false
 		};
 		if (Object.keys(users).length == 0) {	//If first user, become the DJ
 			newUser.isDJ = true;
@@ -55,6 +56,7 @@ var onJoined = function(socket) {
 		
 		BroadcastServerMessage(socket,  data.name + " has joined the room.");
 		EmitServerMessage(socket, 'You joined the room', false);
+		EmitServerMessage(socket, 'Type /cmd to see chat commands', false);
 	});
 };
 
@@ -72,6 +74,7 @@ var onMsg = function(socket) {
 var onList = function(socket) {
 	socket.on("list", function(data) {
 		var messageToSend = "Current users: ";
+		
 		Object.keys(users).forEach(function(key) {		//Loops through users and gets each one's name
 			messageToSend += users[key].name + ", ";
 		});
@@ -84,11 +87,9 @@ var onList = function(socket) {
 var onWhosDJ = function(socket) {
 	socket.on("who", function(data) {
 		var messageToSend = "Current DJ: ";
-		Object.keys(users).forEach(function(key) {		//Loops through users and gets each one's name
-			if (users[key].isDJ) {
-				messageToSend += users[key].name;
-			}
-		});
+		
+		var currentDJIndex = GetDJIndex();
+		messageToSend += users[currentDJIndex].name;
 		
 		EmitServerMessage(socket, messageToSend, false);
 	});
@@ -98,6 +99,11 @@ var onWhosDJ = function(socket) {
 var onPlaySong = function(socket) {
 	socket.on("playSong", function(data) {
 		if (users[socket.name].isDJ) {	//Checks if user trying to play is the DJ
+		
+			if (songPlaying) {	//Increases number of played songs if song is interrupted
+				numSongPlays++;
+			}
+			
 			//Store data for time-syncing
 			songPlaying = true;
 			curTime = Date.now();
@@ -114,20 +120,9 @@ var onPlaySong = function(socket) {
 var onSongEnded = function(socket) {
 	socket.on("songEnded", function() {
 		if (users[socket.name].isDJ) {	//Checks if user is the DJ
-			if (numSongPlays >= 3) {	//If DJ's time is up, find new DJ
+			if (numSongPlays >= 3) {	//If DJ's time is up, find new DJ and reset song plays
 				numSongPlays = 0;
-				Object.keys(users).forEach(function(key) {		//Loops through users
-					if (users[key].isDJ) {
-						users[key].isDJ = false;
-					}
-				});
-				
-				//Sets random user as new DJ
-				var newDJIndex = RandomUserIndex();
-				users[newDJIndex].isDJ = true;
-				var messageToSend = users[newDJIndex].name + " is the new DJ!";
-				
-				EmitServerMessage(socket, messageToSend, true);
+				NewDJ(socket);
 			}
 			else {
 				numSongPlays++;	//If DJ's time isn't up, increase counter
@@ -136,21 +131,46 @@ var onSongEnded = function(socket) {
 	});
 };
 
+//Handle users booing the DJ
+var onBoo = function(socket) {
+	socket.on('boo', function(data) {
+		if (!users[socket.name].hasBooed) {		//Check if user can still boo
+			users[socket.name].hasBooed = true;
+			EmitServerMessage(socket, "You booed the DJ!", false);
+			
+			
+			var currentDJIndex = GetDJIndex();	//Get current Dj's index and increase their boo count
+			users[currentDJIndex].booCount++;
+	
+			if (users[currentDJIndex].booCount > Object.keys(users).length / 2) {	//If DJ has been booed too many times, change DJs
+				users[currentDJIndex].booCount = 0;
+				EmitServerMessage(socket, users[currentDJIndex].name + " has been booed too many times!", true);
+				NewDJ(socket);
+			}
+		}
+		else {
+			EmitServerMessage(socket, "You've already booed this DJ! Wait until the DJ changes to boo again.", false);
+		}
+	});
+};
+
+//Handle user commands request
+var onCommand = function(socket) {
+	socket.on('cmd', function(data) {
+		var messageToSend1 = "/list - List all connected users";	//Prints out all chat commands
+		var messageToSend2 = "/who - Tell who the DJ is";
+		
+		EmitServerMessage(socket, messageToSend1, false);
+		EmitServerMessage(socket, messageToSend2, false);
+	});
+};
+
 //Handle user disconnection
 var onDisconnect = function(socket) {
 	socket.on('disconnect', function(data) {
 		if (users[socket.name].isDJ && Object.keys(users).length > 1){
-			
-			//Sets new DJ that isn't the disconnecting user
-			var newDJIndex;
-			do {	//Must fire at least once, continue if disconnecting user was chosen as new DJ
-				newDJIndex = RandomUserIndex();
-			} while (users[socket.name] == users[newDJIndex])
-				
-			users[newDJIndex].isDJ = true;
-			
-			var messageToSend = users[newDJIndex].name + " is the new DJ!";		
-			EmitServerMessage(socket, messageToSend, true);
+			//Sets new DJ if disconnecting user is the DJ
+			NewDJ(socket);
 		}
 		delete users[socket.name];		//Removes disconnecting user from the list
 		
@@ -195,4 +215,40 @@ function BroadcastServerMessage(socket, message) {
 			name: 'Server',
 			msg: message
 	});
+}
+
+//Return the index of the current DJ
+function GetDJIndex() {
+	var djIndex;
+	Object.keys(users).forEach(function(key) {		//Loops through users and returns the DJ's index
+		if (users[key].isDJ) {
+			djIndex = key;
+		}
+	});
+	return djIndex;
+}
+
+//Choose random new DJ who isn't the previous
+function NewDJ(socket) {
+	Object.keys(users).forEach(function(key) {		//Loops through users and resets their Boo enabler
+		users[key].hasBooed = false
+	});
+	
+	if (Object.keys(users).length > 1) {	//Only choose new DJ if there are other people in the room
+		var currentDJIndex = GetDJIndex();
+		
+		var newDJIndex;
+		do {								//Must fire at least once, continue until new DJ is chosen
+			newDJIndex = RandomUserIndex();
+		} while (currentDJIndex == newDJIndex)
+			
+		users[currentDJIndex].isDJ = false;		//Change DJ and reset their boos
+		users[currentDJIndex].booCount = 0;
+		users[newDJIndex].isDJ = true;
+		
+		numSongPlays = 0;		//Reset number of played songs
+		
+		var messageToSend = users[newDJIndex].name + " is the new DJ!";
+		EmitServerMessage(socket, messageToSend, true);
+	}
 }

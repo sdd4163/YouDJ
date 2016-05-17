@@ -1,6 +1,7 @@
 var controllers = require('./controllers');
 var mid = require('./middleware');
 
+//Hookup routes for site paths
 var router = function(app) {
 	app.get("/login", mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 	app.post("/login", mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

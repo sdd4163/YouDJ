@@ -1,3 +1,5 @@
+"use strict"
+
 var socket;
 var user;
 
@@ -25,9 +27,8 @@ function sendMessage(e) {
 	var messageToSend = message.value;
 	
 	//Check for chat commands
-	if (messageToSend == "/score") {	//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!
-		socket.emit('score', {
-			name: user
+	if (messageToSend == "/cmd") {	//Lists chat commands
+		socket.emit('cmd', {
 		});
 	}
 	else if (messageToSend == "/list") {	//Lists currently connected users
@@ -38,17 +39,16 @@ function sendMessage(e) {
 		socket.emit('who', {
 		});
 	}
-	else if (messageToSend.indexOf("/upvote") != -1) {	//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!
-		var targetName = messageToSend.slice(8);
-		socket.emit('upvote', {
-			name: user,
-			targ: targetName
-		});
-	}
 	else {
 		socket.emit('msgToServer', {	//If no commands, just send a chat message
 			name: user,
 			msg: messageToSend
 		});
 	}
+}
+
+//Self-explanatory, socket emit function specifically for the "Boo!" button
+function booDJ(e) {
+	socket.emit('boo', {
+	});
 }

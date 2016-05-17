@@ -25,6 +25,9 @@ $(document).ready(function() {
 	var send = document.querySelector("#send");
 	send.addEventListener('click', sendMessage);
 	
+	var boo = document.getElementById('boo');
+	boo.addEventListener('click', booDJ);
+	
 	socket.on('play', function(data) {
 		playStream(data.path);
 	});
@@ -76,13 +79,6 @@ $(document).ready(function() {
 				searchResult.innerHTML = html;
 			}
 		});
-		
-		//Results animate onto page
-		$("#searchResults").animate({
-			backgroundColor: "gray",
-			color: "#fff",
-			height: 60
-		}, 1000);
 	});
 	
 	

@@ -1,20 +1,21 @@
 extends ./base.pug
 block append style
+    link(rel="stylesheet", type="text/css", href="/assets/style2.css")
 block body
   nav
     .navlink
       a(href="/login") Login
-    .navlink
-      a(href="/signup") Sign up
+  h3 Enter your desired username and password now.
   section#signup
     form#signupForm(class="mainForm", name="signupForm", action="/signup", method="POST")
       label(for="username") Username: 
-      input#user(type="text", name="username", placeholder="username")
+      input#user(type="text", name="username", placeholder="Username")
       label(for="pass") Password: 
-      input#pass(type="password", name="pass", placeholder="password")
-      label(for="pass2") Password: 
-      input#pass2(type="password", name="pass2", placeholder="retype password")
+      input#pass(type="password", name="pass", placeholder="Password")
+      label(for="pass2") Confirm: 
+      input#pass2(type="password", name="pass2", placeholder="Confirm password")
       input(type="hidden", name="_csrf", value=csrfToken)
       a#signupSubmit(class="formSubmit", href="#") Sign up
+    section#error
 block scripts
         script(src="/assets/client.js")

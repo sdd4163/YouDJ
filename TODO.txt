@@ -1,13 +1,6 @@
 ----------------------Required-----------------------------
 
--Incorporate Visualizer into client
-
--Add and implement "Boo" button (DJ is changed after 3(?) boos)
-
 -Unit Tests
-
--Good-looking UI (nonexistent right now)
-
 
 -------------------Stretch Goals---------------------------
 
@@ -22,13 +15,9 @@
 
 ----------------Continuous/Final Checks--------------------
 
--Clean up old/useless code
-
--Comment
-
--Replace repeated code with helper functions
-
 -Change/Update things to current project
 	>Change package's description
 	>Change file names?
 	>Remove old files
+	
+-Doc

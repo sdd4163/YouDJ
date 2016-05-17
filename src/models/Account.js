@@ -1,11 +1,13 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 
+//Variables
 var AccountModel;
 var iterations = 10000;
 var saltLength = 64;
 var keyLength = 64;
 
+//Data structure for model to follow
 var AccountSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -24,11 +26,6 @@ var AccountSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-	
-	popularity: {
-		type: Number,
-		default: 0
-	},
     
     createdData: {
         type: Date,
@@ -37,6 +34,7 @@ var AccountSchema = new mongoose.Schema({
 
 });
 
+//Returns user data to API call
 AccountSchema.methods.toAPI = function() {
     return {
         username: this.username,
@@ -44,6 +42,7 @@ AccountSchema.methods.toAPI = function() {
     };
 };
 
+//Checks if the password is correct
 AccountSchema.methods.validatePassword = function(password, callback) {
 	var pass = this.password;
 	
@@ -55,8 +54,8 @@ AccountSchema.methods.validatePassword = function(password, callback) {
 	});
 };
 
+//Searches database for account with matching username
 AccountSchema.statics.findByUsername = function(name, callback) {
-
     var search = {
         username: name
     };
@@ -64,6 +63,7 @@ AccountSchema.statics.findByUsername = function(name, callback) {
     return AccountModel.findOne(search, callback);
 };
 
+//Creates secure hash for password
 AccountSchema.statics.generateHash = function(password, callback) {
 	var salt = crypto.randomBytes(saltLength);
 	
@@ -72,9 +72,9 @@ AccountSchema.statics.generateHash = function(password, callback) {
 	});
 }
 
+//Verifies account credentials
 AccountSchema.statics.authenticate = function(username, password, callback) {
 	return AccountModel.findByUsername(username, function(err, doc) {
-
 		if(err)
 		{
 			return callback(err);
@@ -96,7 +96,6 @@ AccountSchema.statics.authenticate = function(username, password, callback) {
 };
 
 AccountModel = mongoose.model('Account', AccountSchema);
-
 
 module.exports.AccountModel = AccountModel;
 module.exports.AccountSchema = AccountSchema;

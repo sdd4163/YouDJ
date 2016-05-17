@@ -1,3 +1,4 @@
+//Verifies the user is logged in validly
 var requiresLogin = function(req, res, next) {
 	if (!req.session.account) {
 		return res.redirect('/');
@@ -5,6 +6,7 @@ var requiresLogin = function(req, res, next) {
 	next();
 };
 
+//Verifies the user isn't logged in
 var requiresLogout = function(req, res, next) {
 	if (req.session.account) {
 		return res.redirect('/app');
@@ -12,6 +14,7 @@ var requiresLogout = function(req, res, next) {
 	next();
 };
 
+//Ensures a secure connection
 var requiresSecure = function(req, res, next) {
 	if (req.headers['x-forwarded-proto'] != 'https') {
 		return res.redirect('https://' + req.hostname + req.url);
@@ -19,6 +22,7 @@ var requiresSecure = function(req, res, next) {
 	next();
 };
 
+//Ignores security requirement
 var bypassSecure = function(req, res, next) {
 	next();
 };

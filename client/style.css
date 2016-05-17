@@ -1,4 +1,132 @@
+/*Default tag styling*/
+body {
+	font-family: 'Jura', sans-serif;
+	background-color: #5FAAF2;
+}
+div {
+	padding-top: 0px;
+	margin-top: 0px;
+}
+
 textarea {
 	display: block;
 	background-color: #EEEEEE;
 }
+
+section, p{
+	padding-bottom: 5px;
+}
+
+h1{
+	font-size: 48px;
+	margin: 0px;
+}
+h2{
+	margin-bottom: 3px;
+	margin-top: 10px;
+}
+
+a {
+	text-decoration: none;
+	background-color: #027BF0;
+	padding: 2px 6px 2px 6px;
+	border: 1px solid #000000;
+	color: #000000;
+}
+
+
+/*Specific Tag Styling*/
+section#visualizer {
+	padding-bottom: 0px;
+}
+.colorsHeading {
+	margin-top: 0px;
+}
+
+
+/*Canvas Styling*/
+#canvas1{
+	opacity: 0.99;
+	position: absolute;
+	z-index:0;
+}
+#canvas2{
+	opacity: .8;
+	position: absolute;
+	z-index:1;
+}
+#bCanvas{
+	background-color:black;
+	border: 2px solid black;
+}
+#canvas{
+	border: 2px solid black;
+}
+
+
+/*Controls Areas Styling*/
+#audioControls{
+	position: relative;
+	width: 999px;
+	top: -149px;
+	background-color: #726BF4;
+	padding: 5px 0px 0px 5px;
+}
+
+#visualizerControls, #chatControls{
+	position: relative;
+	left: 1004px;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 300px;
+}
+#visualizerControls {
+	background-color: #FFD858;
+	padding-bottom: 24px;
+}
+#chatControls{
+	background-color: #FFBB58;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+#searchResults{
+	margin-top: 10px;
+	font-size: 20px;
+	height: 75px;
+	vertical-align: middle;
+}
+
+/*Buttons and Controls Styling*/
+#message {
+	position: relative;
+	width: 80%;
+}
+#send {
+	margin-left: 14px;
+}
+
+#saveButton {
+	margin-right: 10px;
+}
+
+#boo {
+	float: right;
+	margin-right: 5px;
+}
+
+#volumeLabel, #playerVol {
+	margin-bottom: 10px;
+}
+#playerVol {
+	vertical-align: middle;
+}
+
+#search {
+	width: 95%;
+}
+#searchB {
+	float: right;
+	margin-right: 5px;
+}
+

@@ -128,7 +128,7 @@ $(document).ready(function() {
     
     $("#addSongSubmit").on("click", function(e) {
         e.preventDefault();
-        if($("#songTitle").val() == '' || $("#songArtist").val() == '') {
+        if($("#songTitle").val() === '' || $("#songArtist").val() === '') {
             handleError("Error! All fields are required!");
             return false;
         }

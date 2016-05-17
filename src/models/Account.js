@@ -70,7 +70,7 @@ AccountSchema.statics.generateHash = function(password, callback) {
 	crypto.pbkdf2(password, salt, iterations, keyLength, function(err, hash){
 		return callback(salt, hash.toString('hex'));
 	});
-}
+};
 
 //Verifies account credentials
 AccountSchema.statics.authenticate = function(username, password, callback) {

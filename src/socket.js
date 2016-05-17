@@ -39,7 +39,7 @@ var onJoined = function(socket) {
 			booCount: 0,
 			hasBooed: false
 		};
-		if (Object.keys(users).length == 0) {	//If first user, become the DJ
+		if (Object.keys(users).length === 0) {	//If first user, become the DJ
 			newUser.isDJ = true;
 		}
 		users[socket.name] = newUser;
@@ -231,7 +231,7 @@ function GetDJIndex() {
 //Choose random new DJ who isn't the previous
 function NewDJ(socket) {
 	Object.keys(users).forEach(function(key) {		//Loops through users and resets their Boo enabler
-		users[key].hasBooed = false
+		users[key].hasBooed = false;
 	});
 	
 	if (Object.keys(users).length > 1) {	//Only choose new DJ if there are other people in the room
@@ -240,7 +240,7 @@ function NewDJ(socket) {
 		var newDJIndex;
 		do {								//Must fire at least once, continue until new DJ is chosen
 			newDJIndex = RandomUserIndex();
-		} while (currentDJIndex == newDJIndex)
+		} while (currentDJIndex == newDJIndex);
 			
 		users[currentDJIndex].isDJ = false;		//Change DJ and reset their boos
 		users[currentDJIndex].booCount = 0;

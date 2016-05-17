@@ -1,7 +1,7 @@
 {
-  "name": "playlistmaker",
+  "name": "youdj",
   "version": "1.0.0",
-  "description": "A simple, MVC playlist creator",
+  "description": "A group-oriented music experience",
   "main": "index.js",
   "scripts": {
     "start": "node ./src/app.js",

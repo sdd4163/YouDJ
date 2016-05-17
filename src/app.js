@@ -69,7 +69,7 @@ app.use(function (err, req, res, next) {
 		return next(err);
 	}
 	return;
-})
+});
 
 router(app);
 

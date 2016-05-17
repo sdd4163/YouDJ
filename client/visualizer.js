@@ -47,7 +47,7 @@
 			//Setup map function
 			Number.prototype.map = function (in_min, in_max, out_min, out_max) {				//Gotten from http://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers
 				return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;		//User: August Miller
-			}
+			};
 			
 			//Mouse
 			canvas.onmousedown = doMousedown;
@@ -154,27 +154,27 @@
 					circleBox = true;
 				}
 				else if (localStorage.getItem("CircleOn") == "false"){
-					circleBox = false
+					circleBox = false;
 				}
 				if (localStorage.getItem("WaveOn") == "true"){
 					lineBox = true;
 				}
 				else if (localStorage.getItem("WaveOn") == "false"){
-					lineBox = false
+					lineBox = false;
 				}
 				if (localStorage.getItem("LinesOn") == "true"){
 					linesBox = true;
 				}
 				else if (localStorage.getItem("LinesOn") == "false"){
-					linesBox = false
+					linesBox = false;
 				}
 				if (localStorage.getItem("CrazyOn") == "true"){
 					crazyBox = true;
 				}
 				else if (localStorage.getItem("CrazyOn") == "false"){
-					crazyBox = false
+					crazyBox = false;
 				}
-			}
+			};
 		}
 		
 		// HELPER, makes a new color
@@ -184,7 +184,7 @@
 		}
 		// HELPER, gets the mouse position
 		function getMouse(e){
-			var mouse = {}
+			var mouse = {};
 			mouse.x = e.pageX - e.target.offsetLeft - 8;
 			mouse.y = e.pageY - e.target.offsetTop - 8;
 			return mouse;

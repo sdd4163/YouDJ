@@ -93,7 +93,7 @@ $(document).ready(function() {
 	function playStreamLate(path, time){
 		path += '?client_id=' + clientID;
 		audioElement.src = path;
-		audioElement.currentTime = (Date.now() - time) / 1000;
+		audioElement.currentTime = time;
 		audioElement.play();
 	}
 	

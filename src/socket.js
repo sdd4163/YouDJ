@@ -50,7 +50,7 @@ var onJoined = function(socket) {
 		if (songPlaying) {
 			socket.emit('playLate', {
 				path: curSong,
-				time:  curTime	//Puts current time into seconds
+				time:  ((Date.now() - curTime) + 50) / 1000	//Puts current time into seconds
 			});
 		}
 		

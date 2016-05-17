@@ -19,7 +19,7 @@ module.exports = function(socket) {
 var users = {};
 
 //Variables for audio time-syncing
-var songPlaying = false;
+var songPlaying;
 var curTime, curSong;
 
 //Variables for DJ control
